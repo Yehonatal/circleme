@@ -8,9 +8,9 @@
 
 .action_btn {
     display: flex;
-    gap: 1em;
+    gap: 10px;
     user-select: none;
-
+    flex-wrap: wrap;
     position: absolute;
     top: 0;
     left: 0;
