@@ -1,108 +1,106 @@
-import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import { useState, useRef } from "react";
 import "./App.css";
 
-const Shape = ({ shape, color, position }) => {
-    const [width, setWidth] = useState(getWidth());
-    const style = {
-        width: `${width}px`,
-        height: `${width}px`,
-        backgroundColor: color,
-        position: "absolute",
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-    };
-
-    useEffect(() => {
-        setWidth(getWidth());
-    }, [shape]);
-
-    function getWidth() {
-        const min = 10;
-        const max = 275;
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    return <div style={style} className={shape}></div>;
-};
-
-Shape.propTypes = {
-    shape: PropTypes.string.isRequired,
-    color: PropTypes.string.isRequired,
-    position: PropTypes.shape({
-        x: PropTypes.number.isRequired,
-        y: PropTypes.number.isRequired,
-    }),
-};
-
-const App = () => {
+function App() {
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [shape, setShape] = useState("circle");
     const shapeOptions = [
         "circle",
         "square",
-        "building",
+        "triangle",
         "pentagon",
         "hexagon",
         "octagon",
     ];
     const [selectedColor, setSelectedColor] = useState("#ffff00");
-    const [shapes, setShapes] = useState([]);
+    const [elements, setElements] = useState([]);
 
-    const addShape = (e) => {
-        if (!isMouseDown) return;
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const shapeObj = {
-            shape,
-            color: selectedColor,
-            position: { x, y },
-            id: Date.now(),
-        };
-        setShapes((prevShapes) => [...prevShapes, shapeObj]);
+    const containerRef = useRef(null);
+
+    const getWidth = () => {
+        const min = 10;
+        const max = 275;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
-    useEffect(() => {
-        const handleMouseDown = () => {
-            setIsMouseDown(true);
+    const chooseShape = (choice) => {
+        setShape(choice);
+    };
+
+    const handleMouseDown = () => {
+        setIsMouseDown(true);
+    };
+
+    const handleMouseUp = () => {
+        setIsMouseDown(false);
+    };
+
+    const addShape = (e) => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left - getWidth() / 2;
+        const y = e.clientY - rect.top - getWidth() / 2;
+
+        // if (x < 0 || x > rect.width || y < 0 || y > rect.height) return;
+
+        const newElement = {
+            shape: shape,
+            width: getWidth(),
+            color: selectedColor,
+            x: x,
+            y: y,
         };
 
-        const handleMouseUp = () => {
-            setIsMouseDown(false);
-        };
-
-        document.addEventListener("mousedown", handleMouseDown);
-        document.addEventListener("mouseup", handleMouseUp);
-
-        return () => {
-            document.removeEventListener("mousedown", handleMouseDown);
-            document.removeEventListener("mouseup", handleMouseUp);
-        };
-    }, [isMouseDown]);
+        setElements((prevElements) => [...prevElements, newElement]);
+    };
 
     return (
         <>
             <main
+                ref={containerRef}
                 className="container"
-                onMouseMove={addShape}
-                onClick={addShape}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onMouseMove={(e) => {
+                    if (isMouseDown) {
+                        addShape(e);
+                    }
+                }}
+                onClick={(e) => {
+                    if (!isMouseDown) {
+                        addShape(e);
+                    }
+                }}
             >
-                {shapes.map((s) => (
-                    <Shape
-                        key={s.id}
-                        shape={s.shape}
-                        color={s.color}
-                        position={s.position}
-                    />
+                {elements.map((element, index) => (
+                    <div
+                        key={index}
+                        className={element.shape}
+                        style={{
+                            width: `${element.width}px`,
+                            height: `${element.width}px`,
+                            position: "absolute",
+                            backgroundColor: element.color,
+                            left: `${element.x}px`,
+                            top: `${element.y}px`,
+                        }}
+                    ></div>
                 ))}
             </main>
             <div className="action_btn">
                 <button>undo</button>
                 <button>redo</button>
-                <button>Clean</button>
+                <button
+                    onClick={() => {
+                        setElements([]);
+                    }}
+                >
+                    Clean
+                </button>
                 <div className="shape_options">
-                    <select onChange={(e) => setShape(e.target.value)}>
+                    <select onChange={(e) => chooseShape(e.target.value)}>
                         {shapeOptions.map((shape, index) => (
                             <option key={index} value={shape}>
                                 {shape}
@@ -118,6 +116,6 @@ const App = () => {
             </div>
         </>
     );
-};
+}
 
 export default App;
