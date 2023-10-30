@@ -19,7 +19,7 @@ function App() {
 
     const getWidth = () => {
         const min = 10;
-        const max = 275;
+        const max = 350;
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
@@ -68,6 +68,12 @@ function App() {
         });
     };
 
+    const undoAdd = () => {
+        const newElements = [...elements];
+        newElements.pop();
+        setElements(newElements);
+    };
+
     return (
         <>
             <main
@@ -103,7 +109,7 @@ function App() {
             </main>
             <div className="action_btn">
                 <button onClick={saveImage}>save</button>
-                <button>undo</button>
+                <button onClick={() => undoAdd()}>undo</button>
                 <button>redo</button>
                 <button
                     onClick={() => {
