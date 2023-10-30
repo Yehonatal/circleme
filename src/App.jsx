@@ -1,89 +1,27 @@
-import { useState, useRef } from "react";
 import "./App.css";
-import html2canvas from "html2canvas";
+import { useRef } from "react";
+import { useGetAction } from "./hooks/useGetAction";
+import { useGetShapes } from "./hooks/useGetShapes";
+
 function App() {
-    const [isMouseDown, setIsMouseDown] = useState(false);
-    const [shape, setShape] = useState("circle");
-    const shapeOptions = [
-        "circle",
-        "square",
-        "triangle",
-        "pentagon",
-        "hexagon",
-        "octagon",
-    ];
-    const [selectedColor, setSelectedColor] = useState("#ffff00");
-    const [elements, setElements] = useState([]);
-    const [lastPop, setLastPop] = useState([]);
-
     const containerRef = useRef(null);
-
-    const getWidth = () => {
-        const min = 10;
-        const max = 350;
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-
-    const chooseShape = (choice) => {
-        setShape(choice);
-    };
-
-    const handleMouseDown = () => {
-        setIsMouseDown(true);
-    };
-
-    const handleMouseUp = () => {
-        setIsMouseDown(false);
-    };
-
-    const addShape = (e) => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left - getWidth() / 2;
-        const y = e.clientY - rect.top - getWidth() / 2;
-
-        const newElement = {
-            shape: shape,
-            width: getWidth(),
-            color: selectedColor,
-            x: x,
-            y: y,
-        };
-
-        setElements((prevElements) => [...prevElements, newElement]);
-    };
-
-    const saveImage = () => {
-        const container = containerRef.current;
-        if (!container) return;
-        html2canvas(container).then((canvas) => {
-            const imgData = canvas.toDataURL("image/jpeg");
-            const link = document.createElement("a");
-            link.href = imgData;
-            const fileName = prompt("Enter file name", "canvas_image");
-            if (fileName === null) return; // If the user cancels the prompt
-            link.download = `${fileName}.jpg`;
-            link.click();
-        });
-    };
-
-    const undoAdd = () => {
-        if (elements.length == 0) return;
-
-        const newElements = [...elements];
-        const popped = newElements.pop();
-        setLastPop([...lastPop, popped]);
-        setElements(newElements);
-    };
-
-    const redoUndo = () => {
-        if (lastPop.length == 0) return;
-        const lastPopped = lastPop[lastPop.length - 1];
-        setElements([...elements, lastPopped]);
-        setLastPop(lastPop.slice(0, -1));
-    };
+    const {
+        chooseShape,
+        handleMouseDown,
+        handleMouseUp,
+        addShape,
+        shapeOptions,
+        elements,
+        selectedColor,
+        setElements,
+        isMouseDown,
+        setSelectedColor,
+    } = useGetShapes(containerRef);
+    const { undoAdd, redoUndo, saveImage } = useGetAction(
+        containerRef,
+        elements,
+        setElements
+    );
 
     return (
         <>
@@ -120,15 +58,9 @@ function App() {
             </main>
             <div className="action_btn">
                 <button onClick={saveImage}>save</button>
-                <button onClick={() => undoAdd()}>undo</button>
-                <button onClick={() => redoUndo()}>redo</button>
-                <button
-                    onClick={() => {
-                        setElements([]);
-                    }}
-                >
-                    Clean
-                </button>
+                <button onClick={undoAdd}>undo</button>
+                <button onClick={redoUndo}>redo</button>
+                <button onClick={() => setElements([])}>Clean</button>
                 <div className="shape_options">
                     <select onChange={(e) => chooseShape(e.target.value)}>
                         {shapeOptions.map((shape, index) => (
