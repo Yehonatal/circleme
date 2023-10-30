@@ -37,6 +37,7 @@
 
 .circle {
     border-radius: 50%;
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.145);
     border: 3px solid white;
 }
 
@@ -44,6 +45,7 @@
     width: 100px;
     height: 100px;
     border: 3px solid white;
+    box-shadow: inset 0 0 5px black;
 }
 
 .building {
@@ -52,6 +54,7 @@
     border-left: 50px solid transparent;
     border-right: 50px solid transparent;
     border: 3px solid white;
+    box-shadow: inset 0 0 5px black;
     border-bottom: 100px solid yellow;
 }
 
@@ -60,6 +63,7 @@
     width: 100px;
     height: 100px;
     border: 3px solid white;
+    box-shadow: inset 0 0 5px black;
     clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
 }
 
@@ -69,6 +73,7 @@
     height: 57.74px;
     background-color: yellow;
     border: 3px solid white;
+    box-shadow: inset 0 0 5px black;
     clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
 }
 
@@ -78,7 +83,7 @@
     height: 100px;
     border: 3px solid white;
     background-color: yellow;
-    box-shadow: 5px 5px 0px 5px black;
+    box-shadow: inset 0 0 5px black;
     clip-path: polygon(
         28% 0%,
         72% 0%,
