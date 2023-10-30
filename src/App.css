@@ -1,0 +1,92 @@
+.container {
+    border: 3px solid white;
+    height: 97vh;
+    overflow: hidden;
+
+    position: relative;
+}
+
+.action_btn {
+    display: flex;
+    gap: 1em;
+    user-select: none;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.action_btn button {
+    border: 3px solid white;
+    border-radius: 8px;
+    text-transform: uppercase;
+}
+
+.action_btn select,
+.action_btn input[type="color"] {
+    border: 3px solid white;
+    text-transform: uppercase;
+    border-radius: 8px;
+    padding: 0.5em;
+}
+
+.shape_options {
+    display: flex;
+    gap: 1em;
+}
+
+.circle {
+    border-radius: 50%;
+    border: 3px solid white;
+}
+
+.square {
+    width: 100px;
+    height: 100px;
+    border: 3px solid white;
+}
+
+.building {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border: 3px solid white;
+    border-bottom: 100px solid yellow;
+}
+
+.pentagon {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 3px solid white;
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+.hexagon {
+    position: relative;
+    width: 100px;
+    height: 57.74px;
+    background-color: yellow;
+    border: 3px solid white;
+    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+}
+
+.octagon {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 3px solid white;
+    background-color: yellow;
+    box-shadow: 5px 5px 0px 5px black;
+    clip-path: polygon(
+        28% 0%,
+        72% 0%,
+        100% 28%,
+        100% 72%,
+        72% 100%,
+        28% 100%,
+        0% 72%,
+        0% 28%
+    );
+}
