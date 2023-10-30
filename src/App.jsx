@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import "./App.css";
-
+import html2canvas from "html2canvas";
 function App() {
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [shape, setShape] = useState("circle");
@@ -43,8 +43,6 @@ function App() {
         const x = e.clientX - rect.left - getWidth() / 2;
         const y = e.clientY - rect.top - getWidth() / 2;
 
-        // if (x < 0 || x > rect.width || y < 0 || y > rect.height) return;
-
         const newElement = {
             shape: shape,
             width: getWidth(),
@@ -54,6 +52,20 @@ function App() {
         };
 
         setElements((prevElements) => [...prevElements, newElement]);
+    };
+
+    const saveImage = () => {
+        const container = containerRef.current;
+        if (!container) return;
+        html2canvas(container).then((canvas) => {
+            const imgData = canvas.toDataURL("image/jpeg");
+            const link = document.createElement("a");
+            link.href = imgData;
+            const fileName = prompt("Enter file name", "canvas_image");
+            if (fileName === null) return; // If the user cancels the prompt
+            link.download = `${fileName}.jpg`;
+            link.click();
+        });
     };
 
     return (
@@ -90,6 +102,7 @@ function App() {
                 ))}
             </main>
             <div className="action_btn">
+                <button onClick={saveImage}>save</button>
                 <button>undo</button>
                 <button>redo</button>
                 <button
