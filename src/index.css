@@ -14,6 +14,10 @@
     -webkit-text-size-adjust: 100%;
 }
 
+.container {
+    background-color: #242424;
+}
+
 a {
     font-weight: 500;
     color: #646cff;
@@ -49,6 +53,10 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
     :root {
         color: #213547;
+        background-color: #ffffff;
+    }
+
+    .container {
         background-color: #ffffff;
     }
     a:hover {
