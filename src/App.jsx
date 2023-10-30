@@ -14,6 +14,7 @@ function App() {
     ];
     const [selectedColor, setSelectedColor] = useState("#ffff00");
     const [elements, setElements] = useState([]);
+    const [lastPop, setLastPop] = useState([]);
 
     const containerRef = useRef(null);
 
@@ -69,9 +70,19 @@ function App() {
     };
 
     const undoAdd = () => {
+        if (elements.length == 0) return;
+
         const newElements = [...elements];
-        newElements.pop();
+        const popped = newElements.pop();
+        setLastPop([...lastPop, popped]);
         setElements(newElements);
+    };
+
+    const redoUndo = () => {
+        if (lastPop.length == 0) return;
+        const lastPopped = lastPop[lastPop.length - 1];
+        setElements([...elements, lastPopped]);
+        setLastPop(lastPop.slice(0, -1));
     };
 
     return (
@@ -110,7 +121,7 @@ function App() {
             <div className="action_btn">
                 <button onClick={saveImage}>save</button>
                 <button onClick={() => undoAdd()}>undo</button>
-                <button>redo</button>
+                <button onClick={() => redoUndo()}>redo</button>
                 <button
                     onClick={() => {
                         setElements([]);
