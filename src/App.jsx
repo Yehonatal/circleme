@@ -17,7 +17,7 @@ function App() {
         isMouseDown,
         setSelectedColor,
     } = useGetShapes(containerRef);
-    const { undoAdd, redoUndo, saveImage } = useGetAction(
+    const { handleUndo, handleRedo, handSaveDesign } = useGetAction(
         containerRef,
         elements,
         setElements
@@ -57,9 +57,9 @@ function App() {
                 ))}
             </main>
             <div className="action_btn">
-                <button onClick={saveImage}>save</button>
-                <button onClick={undoAdd}>undo</button>
-                <button onClick={redoUndo}>redo</button>
+                <button onClick={handSaveDesign}>save</button>
+                <button onClick={handleUndo}>undo</button>
+                <button onClick={handleRedo}>redo</button>
                 <button onClick={() => setElements([])}>Clean</button>
                 <div className="shape_options">
                     <select onChange={(e) => chooseShape(e.target.value)}>

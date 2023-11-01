@@ -5,7 +5,7 @@ import html2canvas from "html2canvas";
 export const useGetAction = (containerRef, elements, setElements) => {
     const [lastPop, setLastPop] = useState([]);
 
-    const undoAdd = () => {
+    const handleUndo = () => {
         if (elements.length === 0) return;
 
         const newElements = [...elements];
@@ -14,7 +14,7 @@ export const useGetAction = (containerRef, elements, setElements) => {
         setElements(newElements);
     };
 
-    const redoUndo = () => {
+    const handleRedo = () => {
         if (lastPop.length === 0) return;
 
         const lastPopped = lastPop[lastPop.length - 1];
@@ -22,7 +22,7 @@ export const useGetAction = (containerRef, elements, setElements) => {
         setLastPop(lastPop.slice(0, -1));
     };
 
-    const saveImage = () => {
+    const handSaveDesign = () => {
         const container = containerRef.current;
         if (!container) return;
         html2canvas(container).then((canvas) => {
@@ -36,5 +36,5 @@ export const useGetAction = (containerRef, elements, setElements) => {
         });
     };
 
-    return { undoAdd, redoUndo, saveImage };
+    return { handleUndo, handleRedo, handSaveDesign };
 };
