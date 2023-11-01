@@ -4,6 +4,7 @@ import { useState } from "react";
 export const useGetShapes = (containerRef) => {
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [shape, setShape] = useState("circle");
+    const [offset, setOffset] = useState(0);
     const shapeOptions = [
         "circle",
         "square",
@@ -18,7 +19,9 @@ export const useGetShapes = (containerRef) => {
     const getWidth = () => {
         const min = 10;
         const max = 350;
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+        const width = Math.floor(Math.random() * (max - min + 1)) + min;
+        setOffset(width / 2);
+        return width;
     };
 
     const chooseShape = (choice) => {
@@ -37,9 +40,9 @@ export const useGetShapes = (containerRef) => {
         const container = containerRef.current;
         if (!container) return;
 
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left - getWidth() / 2;
-        const y = e.clientY - rect.top - getWidth() / 2;
+        // const rect = container.getBoundingClientRect();
+        const x = e.clientX - offset;
+        const y = e.clientY - offset;
 
         const newElement = {
             shape: shape,
